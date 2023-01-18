@@ -2,9 +2,11 @@ import {
   CallHandler,
   ExecutionContext,
   NestInterceptor,
-  UnauthorizedException
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import { userData } from '../auth/mock-user/user';
 
 export class UserInterceptor implements NestInterceptor {
   async intercept(context: ExecutionContext, handler: CallHandler) {
@@ -15,8 +17,12 @@ export class UserInterceptor implements NestInterceptor {
       const token = request?.headers?.authorization?.split('Bearer ')[1];
       if (token) {
         const user = await jwt.decode(token);
-        request.user = user;
-        return handler.handle();
+        if (user && user['id'] === userData[0]['id']) {
+          request.user = user;
+          return handler.handle();
+        } else {
+          throw new NotFoundException('Token Expired');
+        }
       } else {
         throw new UnauthorizedException();
       }

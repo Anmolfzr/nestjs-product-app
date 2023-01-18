@@ -48,11 +48,6 @@ export class ProductResponseDto {
   price: number;
   isDeleted: boolean;
 
-  //@Expose({ name: 'createdAt' })
-  // transformCreatedAt() {
-  //   return this.created_at;
-  // }
-
   @Exclude()
   created_at: Date;
 

@@ -76,12 +76,12 @@ export class ProductController {
   })
   @Get('all')
   getAllProducts(@User() user: UserInfo) {
-    console.log(user);
+    console.log('details',user);
 
     return this.productService.getAllProducts();
   }
 
-  //=======================================
+  //=======================================  
 
   @ApiOperation({
     description:
@@ -233,7 +233,6 @@ export class ProductController {
         name: 'test',
         isDeleted: false,
       },
-      // For instructions on how to set a Schema, please refer to https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object-examples
     },
   })
   @ApiBadRequestResponse({
@@ -245,15 +244,15 @@ export class ProductController {
       },
     },
   })
-  // @ApiResponse({
-  //   description: 'Unauthorized Request',
-  //   schema: {
-  //     example: {
-  //       statusCode: 401,
-  //       message: 'Unauthorized',
-  //     },
-  //   },
-  // })
+  @ApiResponse({
+    description: 'Unauthorized Request',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
   @ApiResponse({
     description: 'Internal Server Error',
     schema: {
