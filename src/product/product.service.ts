@@ -18,13 +18,16 @@ interface UpdateProduct {
 export class ProductService {
   constructor() {}
 
-  getAllProducts(): ProductResponseDto[] {
+  getAllProducts() {
     try {
       const products = productData.map(
         (product) => new ProductResponseDto(product),
       );
       if (products) {
-        return products;
+        return {
+          data: products,
+          isSuccess: true,
+        };
       } else {
         throw new NotFoundException('Products not found');
       }
@@ -39,7 +42,10 @@ export class ProductService {
         ids.includes(product.id),
       );
       if (filteredProductData.length === ids.length) {
-        return filteredProductData;
+        return {
+          data: filteredProductData,
+          isSuccess: true,
+        };
       } else {
         throw new NotFoundException('One of the product Ids is not found');
       }
@@ -77,22 +83,23 @@ export class ProductService {
               ...productData[productIndex],
               updated_at: new Date(),
             };
-            const response = {
-              statusCode: 200,
-              message: 'Products Soft deleted successfully',
-            };
-            return response;
           } else {
             throw new NotFoundException('One of the product Ids is not found');
           }
         }
       });
+      const response = {
+        statusCode: 200,
+        message: 'Products Soft deleted successfully',
+        isSuccess: true,
+      };
+      return response;
     } catch (error) {
       this.filterError(error.response);
     }
   }
 
-  upsertProduct(products, isDeleted): ProductResponseDto[] {
+  upsertProduct(products, isDeleted) {
     try {
       let result = [];
       products.forEach((data) => {
@@ -117,7 +124,10 @@ export class ProductService {
           throw new NotFoundException('Missing mandatory fields');
         }
       });
-      return result;
+      return {
+        data: result,
+        isSuccess: true,
+      };
     } catch (error) {
       this.filterError(error.response);
     }
@@ -134,7 +144,7 @@ export class ProductService {
     return product;
   }
 
-  createProduct(data: ProductResponseDto) {
+  createProduct(data) {
     const newProduct = this.createObject(data.price, data.name);
     productData.push(newProduct);
     const product = new ProductResponseDto(newProduct);
@@ -154,8 +164,6 @@ export class ProductService {
   }
 
   filterError(error) {
-    console.log(error);
-    
     if (error?.statusCode === 404) {
       throw new NotFoundException(error.message);
     } else {
