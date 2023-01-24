@@ -52,17 +52,6 @@ export class ProductController {
       ],
     },
   })
-
-  // // testing
-  // @ApiResponse({
-  //   description: 'Unauthorized Request',
-  //   schema: {
-  //     example: {
-  //       statusCode: 401,
-  //       message: 'Unauthorized',
-  //     },
-  //   },
-  // })
   @ApiResponse({
     description: 'Internal server error',
     schema: {
@@ -75,13 +64,17 @@ export class ProductController {
     },
   })
   @Get('all')
-  getAllProducts(@User() user: UserInfo) {
-    console.log('details',user);
+  // getAllProducts(@User() user: UserInfo) {
+  //   //test
+  //   console.log('details', user);
 
+  //   return this.productService.getAllProducts();
+  // }
+  getAllProducts() {
     return this.productService.getAllProducts();
   }
 
-  //=======================================  
+  //=======================================
 
   @ApiOperation({
     description:
@@ -93,7 +86,7 @@ export class ProductController {
     type: 'string[]',
     required: true,
     example: {
-      url: 'http://localhost:3000/products/specifiedIds?ids=c520361a-8e76-4564-b0eb-737246fd922b',
+      url: 'http://localhost:3000/products/specifiedIds?ids=c520361a-8e76-4564-b0eb-737246fd922b,aa50e9ae-246b-4955-8fa9-17218a5db945',
     },
   })
   @ApiOkResponse({
@@ -110,7 +103,7 @@ export class ProductController {
           id: 'aa50e9ae-246b-4955-8fa9-17218a5db945',
           name: 'adidas',
           price: 2500,
-          isDeleted: true,
+          isDeleted: false,
         },
       ],
     },
@@ -264,7 +257,7 @@ export class ProductController {
     },
   })
   @Post()
-  upsertProduct(@Body() body) {
+  upsertProduct(@Body() body:CreateProductDto[]) {
     return this.productService.upsertProduct(body, false);
   }
 

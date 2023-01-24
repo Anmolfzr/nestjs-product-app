@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsBoolean,
+  IsEmpty,
 } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
 
@@ -17,6 +18,7 @@ export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
 }
 
 export class UpdateProductDto {

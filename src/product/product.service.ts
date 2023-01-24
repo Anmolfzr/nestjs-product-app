@@ -121,7 +121,10 @@ export class ProductService {
           let createProduct = this.createProduct(data);
           result.push(createProduct);
         } else {
-          throw new NotFoundException('Missing mandatory fields');
+          throw new HttpException({
+            status: 500,
+            error: 'Mandatory fields are not present',
+          }, 500);
         }
       });
       return {
